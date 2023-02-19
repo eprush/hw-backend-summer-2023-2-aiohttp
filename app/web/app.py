@@ -9,15 +9,16 @@ from aiohttp.web import (
 from app.admin.models import Admin
 from app.store import setup_store, Store
 from app.store.database.database import Database
+from app.store.admin.accessor import AdminAccessor, setup_accessor
 from app.web.config import Config, setup_config
 from app.web.logger import setup_logging
 from app.web.middlewares import setup_middlewares
 from app.web.routes import setup_routes
 
-
 class Application(AiohttpApplication):
-    config: Optional[Config] = None
-    store: Optional[Store] = None
+    accessor: Optional[AdminAccessor] = None
+    config:   Optional[Config] = None
+    store:    Optional[Store] = None
     database: Optional[Database] = None
 
 
@@ -48,6 +49,7 @@ app = Application()
 
 def setup_app(config_path: str) -> Application:
     setup_logging(app)
+    setup_accessor(app)
     setup_config(app, config_path)
     setup_routes(app)
     setup_middlewares(app)
